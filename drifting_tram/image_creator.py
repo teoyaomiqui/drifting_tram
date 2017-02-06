@@ -2,6 +2,7 @@ import os
 import shutil
 import subprocess
 from importlib import import_module
+import logging
 
 
 class ImageCreator:
@@ -39,7 +40,11 @@ class StorageAdapter:
         driver = getattr(self.storage_driver_module, self.storage_driver_cls)()
         getattr(driver, action)(**action_kwargs)
 
-pull_kwargs = {'image_uri': 'https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img'}
+
+logging.basicConfig(level=logging.INFO)
+
+pull_kwargs = {'image_uri': 'https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img',
+               'upgrade': False}
 adapter = StorageAdapter('Local')
-adapter.call_driver('pull', pull_kwargs)
+print(adapter.call_driver('pull', pull_kwargs))
 #getattr(adapter, 'init_dir_structure')(**pull_kwargs)
