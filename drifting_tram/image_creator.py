@@ -35,16 +35,22 @@ class StorageAdapter:
     def __init__(self, storage_driver, storage_driver_module='storage.image'):
         self.storage_driver_module = import_module(storage_driver_module)
         self.storage_driver_cls = storage_driver
+        self.driver = getattr(self.storage_driver_module, self.storage_driver_cls)()
 
     def call_driver(self, action, action_kwargs):
-        driver = getattr(self.storage_driver_module, self.storage_driver_cls)()
-        getattr(driver, action)(**action_kwargs)
+        getattr(self.driver, action)(**action_kwargs)
 
+    def driver_attribute(self, attr):
+        return getattr(self.driver, attr)
 
 logging.basicConfig(level=logging.INFO)
 
 pull_kwargs = {'image_uri': 'https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img',
                'upgrade': False}
+register_kwargs = {'image_path': '/home/kkalynovskyi/wirt-wrap/volumes/images/xenial-server-cloudimg-amd64-disk1.img',
+                   'image_name': 'ubuntu-xenial'}
 adapter = StorageAdapter('Local')
-print(adapter.call_driver('pull', pull_kwargs))
+adapter.call_driver('register_image', register_kwargs)
+image_registry = adapter.driver_attribute('image_registry')
+print image_registry
 #getattr(adapter, 'init_dir_structure')(**pull_kwargs)

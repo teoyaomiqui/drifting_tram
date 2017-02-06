@@ -2,6 +2,7 @@ import os
 import logging
 import wget
 import shutil
+import hashlib
 
 
 
@@ -14,6 +15,7 @@ class Local:
         self.cache_dir = self.root_path + 'cache/'
         self.image_dir = self.root_path + 'images/'
         self.containers_dir = self.root_path + 'containers/'
+        self.image_registry = ['1']
 
     def _init_dir_structure(self):
         try:
@@ -53,10 +55,29 @@ class Local:
             raise
         LOG.info('moving image to correct location: %s', file_path)
         shutil.move(self.cache_dir+file_name, file_path)
+
         return file_path
+
+    def register_image(self, image_path, image_name, buffer_size=2**20):
+        if os.path.isfile(image_path):
+            md5 = hashlib.md5()
+            with open(image_path, "rb") as fd:
+                while True:
+                    data = fd.read(buffer_size)
+                    if not data:
+                        break
+                    md5.update(data)
+            image = {'name': image_name, 'path': image_path, 'md5sum': md5.hexdigest()}
+            self.image_registry.append(image)
+            return self.image_registry
+
+
+
 
 
     def list_images(self):
+
         pass
+
 
 
