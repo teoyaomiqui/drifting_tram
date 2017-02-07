@@ -1,8 +1,7 @@
-from objects import adapter
+from utils import cmd
 
-runner = adapter.CliAdapter()
+runner = cmd.Cmd()
 runner.run()
-
 
 
 
