@@ -5,7 +5,6 @@ import shutil
 import hashlib
 
 
-
 LOG = logging.getLogger(__name__)
 
 

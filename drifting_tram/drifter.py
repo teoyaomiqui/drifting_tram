@@ -1,7 +1,7 @@
 from utils import cmd
 
-runner = cmd.Cmd()
-runner.run()
+# runner = cmd.Cmd()
+# runner.run()
 
 
 

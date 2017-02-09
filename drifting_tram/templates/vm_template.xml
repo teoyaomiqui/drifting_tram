@@ -1,0 +1,28 @@
+<domain type='kvm'>
+    <name>{{ vm_name }}</name>
+    <memory>{{ vm_memory }}</memory>
+    <os>
+        <type>hvm</type>
+        <boot dev="hd" />
+    </os>
+    <features>
+        <acpi/>
+    </features>
+    <vcpu>1</vcpu>
+    <devices>
+        <disk type='file' device='disk'>
+            <driver type='qcow2' cache='none'/>
+            <source file='{{ volume_storage }}/{{ vm_name }}/trusty1.img'/>
+            <target dev='vda' bus='virtio'/>
+        </disk>
+        <disk type='file' device='disk'>
+            <source file='{{ volume_storage }}/{{ vm_name }}/user-data.img'/>
+            <target dev='vdb' bus='virtio'/>
+        </disk>
+        <interface type='network'>
+            <source network='default'/>
+            <model type='virtio'/>
+        </interface>
+    </devices>
+</domain>
+</code>
